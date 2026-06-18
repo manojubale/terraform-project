@@ -16,5 +16,5 @@ module "ec2" {
 module "s3" {
   source = "./modules/s3"
 
-  bucket_name = "manoj-prod-bucket-12345"
+  bucket_name = "manoj-prod-bucket-1234578"
 }
