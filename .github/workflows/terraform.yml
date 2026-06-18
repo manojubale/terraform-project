@@ -3,11 +3,11 @@ name: Terraform
 on:
   workflow_dispatch:
     inputs:
-      action:
-        description: "Choose Terraform Action"
+      terraform_action:
+        description: "Select Terraform Action"
         required: true
-        default: "apply"
         type: choice
+        default: apply
         options:
           - apply
           - destroy
@@ -16,8 +16,11 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
@@ -37,13 +40,13 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        if: github.event.inputs.action == 'apply'
+        if: ${{ github.event.inputs.terraform_action == 'apply' }}
         run: terraform plan
 
       - name: Terraform Apply
-        if: github.event.inputs.action == 'apply'
+        if: ${{ github.event.inputs.terraform_action == 'apply' }}
         run: terraform apply -auto-approve
 
       - name: Terraform Destroy
-        if: github.event.inputs.action == 'destroy'
+        if: ${{ github.event.inputs.terraform_action == 'destroy' }}
         run: terraform destroy -auto-approve
